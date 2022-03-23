@@ -1,0 +1,9 @@
+max bullets
+number of lifes
+score(hits)
+
+color for life === "red redish-yellow yellow yellowish-green green"
+
+hits_er_life = 3
+
+SCORE    BULLETS_LEFT     HITS     LIVES
