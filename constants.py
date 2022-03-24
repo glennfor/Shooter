@@ -3,11 +3,13 @@
 ###########################
 
 #[game]
+import threading
 import pygame
 import pygame.locals
 
 pygame.init()
 pygame.mixer.init()
+pygame.font.init()
 
 #[utils]
 import os
@@ -25,7 +27,10 @@ UP_DIRECTION = -1
 DOWN_DIRECTION = 1
 
 SPEED = 15
-BULLET_SPEED = 25
+ALIEN_SPEED = 10
+BULLET_SPEED = 20 #25
+
+MAX_BULLETS_ON_SCREEN = 2
 
 #time taken to make an impression to the user in seonds
 IMPRESSION_TIME = 100 / 1000  
@@ -58,7 +63,14 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 
-GAME_BOX_BORDER_COLOR = "#0266FF"
+BORDER_COLOR = getColor("#A390FF")
+BACKGROUND_COLOR = getColor("#FFFFFF")
+
+RED = getColor("#FF0000")
+REDDISH_YELLOW = getColor("#FF8700")
+YELLOW = getColor("#FFFF00")
+YELLOWISH_GREEN = getColor("#87FF00")
+GREEN = getColor("#00FF00")
 
 
 
@@ -74,8 +86,8 @@ def scale(image, newSize) -> pygame.Surface:
     image = pygame.transform.scale(image, newSize)
     return image
 
-BULLET = pygame.image.load("./assets/sprites/bullet-point.png").convert()
-BULLET_TANK = scale(rotate(pygame.image.load("./assets/sprites/shot.gif"),90),(10, 20)).convert()
+BULLET = rotate(pygame.image.load("./assets/sprites/shot.gif"),180).convert()
+BULLET_TANK = scale(pygame.image.load("./assets/sprites/shot.gif"),(10, 20)).convert()
               
 BACKGROUND = scale(pygame.image.load(os.path.join(".", "assets", "sprites", "battle.jpg")),
                 (WINDOW_WIDTH, WINDOW_HEIGHT)).convert()
@@ -93,10 +105,24 @@ SHOOT_2 = pygame.mixer.Sound('./assets/sounds/TECH WEAPON Gun Shot Phaser Down 0
 #music
 
 pygame.mixer.music.load('./assets/sounds/Tropic Fuse - French Fuse.mp3')
-pygame.mixer.music.play(5)
-pygame.mixer.music.set_volume(1)
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(.5)
 
 
 "🧨🎯🔋✅✔🟢🟢🟠🟠🟡🟡"
-print()
-print("✔🕙 All resources loaded ...")
+
+print("✔🕙 All resources loaded...")
+
+# def run():
+#     pass
+# def setTimeOut(then, lengthOfTime, function, *kwargs):
+#     threading.Thread(None, function, args = kwargs).start()
+    
+
+
+# def after():
+#     while time.time() - now < lengthOfTime:
+#         time.sleep(.9)
+#     running = False
+
+# setTimeOut(time.time(), 1000, after)
