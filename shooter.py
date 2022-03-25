@@ -32,7 +32,7 @@ class Alien:
     
     def fire(self, alienBullets):
         bullet = Bullet(BULLET, DOWN_DIRECTION, BULLET_SPEED)
-        bullet.x , bullet.y = self.x + int(self.rect.width*.5) ,self.y + int(self.rect.height*.9)
+        bullet.x , bullet.y = self.x + int(self.rect.width*(random.randint(1,9)/10)) ,self.y + int(self.rect.height*.9)
         alienBullets.append(bullet)
 
     def move(self):
@@ -86,7 +86,7 @@ def runGame():
     
     #game attrib
     HITS = 0
-    BULLETS_LEFT = 90
+    BULLETS_USED = 0
     LIVES_LEFT = 10
 
     #game varibales
@@ -100,10 +100,10 @@ def runGame():
     hits = pygame.font.SysFont('hack', 25, True, False)
     lives = pygame.font.SysFont('hack', 25, True, False)
 
-    text  = pygame.font.SysFont('script MT', 60, True, False)
+    text  = pygame.font.SysFont('script', 60, True, False)
     
     #utility variables
-    dls = []
+    deadAliens = []
     before = time.time()
     d = float('inf')
 
@@ -122,7 +122,7 @@ def runGame():
 
         WINDOW.blit(hits.render(f'HITS: {HITS}', 1, RED), 
             (WINDOW_MARGIN + 3*WINDOW_PADDING, int(2.5*WINDOW_PADDING)))
-        WINDOW.blit(bullets.render(f'BULLETS: {BULLETS_LEFT}', 1, GREEN), 
+        WINDOW.blit(bullets.render(f'BULLETS: {BULLETS_USED}', 1, GREEN), 
             (WINDOW_MARGIN + WINDOW_PADDING + 200, int(2.5*WINDOW_PADDING)))
         WINDOW.blit(lives.render(f'LIVES LEFT: {LIVES_LEFT}', 1, YELLOW), 
             (WINDOW_MARGIN + WINDOW_PADDING + 450, int(2.5*WINDOW_PADDING)))
@@ -157,28 +157,27 @@ def runGame():
         for bullet in tankBullets:
             for alien in enemies:
                 if pygame.Rect.colliderect(bullet.position(), alien.position()) \
-                    and (alien not in dls):
+                    and (alien not in deadAliens):
                     print("🎯")
                     EXPLODE.play()
                     HITS += 1
                     tankBullets.remove(bullet)
                     alien.image = EXPLOSION
-                    dls.append((alien, time.time()))
+                    deadAliens.append((alien, time.time()))
                     break
         
-        l = len(dls)
-        cp = dls[:]
+        deadAliensCopy = deadAliens[:]
 
-        for alien in cp:
+        for alien in deadAliensCopy:
             if time.time()-alien[1] > IMPRESSION_TIME:
                 try: 
                     enemies.remove(alien[0])
                 except ValueError:
                     pass
                 else:
-                    dls.remove(alien)
+                    deadAliens.remove(alien)
         
-        del cp
+        del deadAliensCopy
 
         #check for bullets hitting player
         for bullet in alienBullets:
@@ -196,7 +195,8 @@ def runGame():
             if pygame.Rect.colliderect(alien.position(), tank.position()) and d == float('inf'):
                 tank.image = EXPLOSION
                 alien.image = EXPLOSION
-                dls.append((alien, time.time()))
+                SHOOT_2.play()
+                deadAliens.append((alien, time.time()))
                 d = time.time()
 
         #create enemies
@@ -219,6 +219,7 @@ def runGame():
                 if event.key == pygame.K_SPACE:
                     tank.fire(tankBullets)
                     SHOOT.play()
+                    BULLETS_USED += 1
         
         keysPressed = pygame.key.get_pressed()
 
@@ -235,7 +236,6 @@ def runGame():
         pygame.display.flip()
         pygame.display.update()
 
-    pygame.mixer.music.fadeout(2000)
     WINDOW.blit(text.render("GAME ENDED!!!", 0, RED), 
     (WINDOW_WIDTH//4, WINDOW_HEIGHT//2))
     pygame.display.update()
@@ -249,6 +249,7 @@ def runGame():
     WINDOW.blit(text.render("Exiting....... ", 0, RED), 
     (WINDOW_WIDTH//4, WINDOW_HEIGHT//4))
     pygame.display.update()
-    pygame.time.wait(2000)
+    pygame.mixer.music.fadeout(500)
+    pygame.time.wait(1000)
     pygame.quit()
     

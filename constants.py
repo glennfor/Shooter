@@ -3,7 +3,6 @@
 ###########################
 
 #[game]
-import threading
 import pygame
 import pygame.locals
 
@@ -106,23 +105,9 @@ SHOOT_2 = pygame.mixer.Sound('./assets/sounds/TECH WEAPON Gun Shot Phaser Down 0
 
 pygame.mixer.music.load('./assets/sounds/Tropic Fuse - French Fuse.mp3')
 pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(.5)
+pygame.mixer.music.set_volume(.7)
 
 
 "🧨🎯🔋✅✔🟢🟢🟠🟠🟡🟡"
 
 print("✔🕙 All resources loaded...")
-
-# def run():
-#     pass
-# def setTimeOut(then, lengthOfTime, function, *kwargs):
-#     threading.Thread(None, function, args = kwargs).start()
-    
-
-
-# def after():
-#     while time.time() - now < lengthOfTime:
-#         time.sleep(.9)
-#     running = False
-
-# setTimeOut(time.time(), 1000, after)
