@@ -31,6 +31,9 @@ BULLET_SPEED = 20 #25
 
 MAX_BULLETS_ON_SCREEN = 2
 
+ALIEN_CHANCE = 1-.7  #probabilty alien will appear
+SHOOT_CHANCE =  1 - .071#probabilty alien will shoot
+
 #time taken to make an impression to the user in seonds
 IMPRESSION_TIME = 100 / 1000  
 

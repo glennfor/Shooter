@@ -188,6 +188,7 @@ def runGame():
                     SHOOT_2.play()
                 if LIVES_LEFT < 1 and d == float('inf'):
                     tank.image = EXPLOSION
+                    EXPLODE.play()
                     d = time.time()
                 
 
@@ -196,17 +197,18 @@ def runGame():
                 tank.image = EXPLOSION
                 alien.image = EXPLOSION
                 SHOOT_2.play()
+                EXPLODE.play()
                 deadAliens.append((alien, time.time()))
                 d = time.time()
 
         #create enemies
-        if time.time() - before > IMPRESSION_TIME*8 and random.random() > 1-.7:
+        if time.time() - before > IMPRESSION_TIME*8 and random.random() > ALIEN_CHANCE:
             before = time.time()
             createEnemy()
 
         #enemys fire at random
         for alien in enemies:
-            if time.time() - before > IMPRESSION_TIME*5 and random.random() > 1 - .071:
+            if time.time() - before > IMPRESSION_TIME*5 and random.random() > SHOOT_CHANCE:
                 alien.fire(alienBullets)
                 before = time.time()
 
